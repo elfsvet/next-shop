@@ -1,3 +1,5 @@
+// option 1: fetch products on the server side (in getServerSideProps)
+
 import Head from 'next/head';
 import { Inter } from 'next/font/google';
 import Title from '@/components/Title';
@@ -5,7 +7,7 @@ import { getProducts } from '@/lib/products';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   console.log('[HomePage] getStaticProps()');
 
   const products = await getProducts();
@@ -15,7 +17,6 @@ export async function getStaticProps() {
     props: {
       products,
     },
-    revalidate: 5 * 60, //seconds
   };
 }
 

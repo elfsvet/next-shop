@@ -1,3 +1,5 @@
+// option 1: fetch products on the server side (in getStaticProps with revalidation)
+
 import Head from 'next/head';
 import { Inter } from 'next/font/google';
 import Title from '@/components/Title';
@@ -15,7 +17,7 @@ export async function getStaticProps() {
     props: {
       products,
     },
-    revalidate: 5 * 60, //seconds
+    revalidate: 30, //seconds
   };
 }
 
