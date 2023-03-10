@@ -1,42 +1,36 @@
-import Head from 'next/head';
-import { Inter } from 'next/font/google';
-import Title from '@/components/Title';
-import { getProducts } from '@/lib/products';
+import { getProducts, Product } from '@/lib/products';
+import ProductCard from '@/components/ProductCard';
+import Page from '@/components/Page';
+import { GetStaticProps } from 'next';
 
-const inter = Inter({ subsets: ['latin'] });
+interface HomePageProps {
+  products: Product[];
+}
 
-export async function getStaticProps() {
-  console.log('[HomePage] getStaticProps()');
-
+export const getStaticProps: GetStaticProps<HomePageProps> = async () => {
+  // console.log('[HomePage] getStaticProps()');
   const products = await getProducts();
 
-  console.log(products);
   return {
     props: {
       products,
     },
-    revalidate: 5 * 60, //seconds
+    revalidate: +process.env.REVALIDATE_SECONDS!,
   };
-}
+};
 
-export default function HomePage({ products }) {
-  console.log('[HomePage] render:', products);
+const HomePage: React.FC<HomePageProps> = ({ products }) => {
+  // console.log('[HomePage] render:', products);
   return (
-    <>
-      <Head>
-        <title>Next Shop</title>
-        <meta name='description' content='Next Shop' />
-        <meta name='viewport' content='width=device-width, initial-scale=1' />
-        <link rel='icon' href='/favicon.ico' />
-      </Head>
-      <main className='px-6 py-4'>
-        <Title>Next Shop</Title>
-        <ul>
-          {products.map((product) => (
-            <li key={product.id}>{product.title}</li>
-          ))}
-        </ul>
-      </main>
-    </>
+    <Page title='Indoor Plants'>
+      <ul className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
+        {products.map((product) => (
+          <li key={product.id}>
+            <ProductCard product={product} />
+          </li>
+        ))}
+      </ul>
+    </Page>
   );
-}
+};
+export default HomePage;
